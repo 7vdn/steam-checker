@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام إرسال أكواد تحقق ستيم | نيورت</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="script.js" defer></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #0f172a;
+        }
+        .red-bg { background-color: #dc2626; }
+        .code-display {
+            font-family: 'Courier New', monospace;
+            letter-spacing: 3px;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .animate-pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        .glow {
+            text-shadow: 0 0 10px rgba(220, 38, 38, 0.7);
+        }
+        .loading-dots:after {
+            content: '.';
+            animation: dots 1.5s steps(5, end) infinite;
+        }
+        @keyframes dots {
+            0%, 20% { color: rgba(0,0,0,0); text-shadow: .25em 0 0 rgba(0,0,0,0), .5em 0 0 rgba(0,0,0,0); }
+            40% { color: white; text-shadow: .25em 0 0 rgba(0,0,0,0), .5em 0 0 rgba(0,0,0,0); }
+            60% { text-shadow: .25em 0 0 white, .5em 0 0 rgba(0,0,0,0); }
+            80%, 100% { text-shadow: .25em 0 0 white, .5em 0 0 white; }
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen">
+        <header class="red-bg text-white shadow-lg">
+            <div class="container mx-auto px-4 py-6">
+                <div class="flex justify-center items-center">
+                    <div class="flex items-center space-x-4">
+                        <i class="fas fa-gamepad text-3xl"></i>
+                        <h1 class="text-2xl font-bold">نظام إرسال أكواد تحقق ستيم | نيورت</h1>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <main class="container mx-auto px-4 py-8">
+            <div id="requestForm" class="max-w-md mx-auto bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-700">
+                <div class="p-8 text-center">
+                    <div class="mb-8">
+                        <i class="fas fa-steam text-6xl text-red-500 mb-4 glow"></i>
+                        <h2 class="text-xl font-bold text-white">أدخل رقم الطلب</h2>
+                        <p class="text-gray-400 mt-2">الرجاء إدخال رقم الطلب للحصول على كود التحقق</p>
+                    </div>
+                    <div class="mb-6">
+                        <input type="text" id="orderNumber" placeholder="رقم الطلب" class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-red-500">
+                    </div>
+                    <button onclick="verifyOrder()" class="w-full px-6 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg flex items-center justify-center transition duration-300">
+                        <i class="fas fa-check-circle ml-2"></i>
+                        تأكيد الطلب
+                    </button>
+                </div>
+            </div>
+            <div id="loadingScreen" class="max-w-md mx-auto bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-700 hidden">
+                <div class="p-8 text-center">
+                    <div class="mb-8">
+                        <div class="animate-spin rounded-full h-20 w-20 border-b-2 border-red-500 mx-auto mb-6"></div>
+                        <h2 class="text-xl font-bold text-white loading-dots">جاري التحقق من الطلب</h2>
+                        <p class="text-gray-400 mt-4">انتظر قليلاً لنعرض لك كود التحقق من ستيم</p>
+                        <p class="text-gray-400 mt-2">جاري التحقق من رقم الطلب عبر منصة سلة...</p>
+                    </div>
+                </div>
+            </div>
+            <div id="codeDisplay" class="max-w-md mx-auto bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-700 hidden">
+                <div class="p-8 text-center">
+                    <div class="mb-8">
+                        <i class="fas fa-key text-6xl text-red-500 mb-4 glow"></i>
+                        <h2 class="text-xl font-bold text-white">كود التحقق الخاص بك</h2>
+                        <p class="text-gray-400 mt-2">تم جلب كود التحقق بنجاح من البريد الإلكتروني</p>
+                    </div>
+                    <div class="bg-gray-700 p-6 rounded-lg mb-6 border border-gray-600">
+                        <div class="code-display text-4xl font-bold text-red-500 py-4 px-6 bg-gray-800 rounded glow" id="verificationCode">G7H9K</div>
+                    </div>
+                    <div class="text-sm text-gray-400 mb-6">
+                        <p>هذا الكود صالح لمدة 5 دقائق فقط</p>
+                        <p class="mt-1">لا تشارك هذا الكود مع أي شخص</p>
+                    </div>
+                    <div class="flex justify-center space-x-4">
+                        <button onclick="copyCode()" class="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg flex items-center transition duration-300">
+                            <i class="fas fa-copy ml-2"></i>
+                            نسخ الكود
+                        </button>
+                        <button onclick="newRequest()" class="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg flex items-center transition duration-300">
+                            <i class="fas fa-redo ml-2"></i>
+                            طلب جديد
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div id="errorDisplay" class="max-w-md mx-auto bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-700 hidden">
+                <div class="p-8 text-center">
+                    <div class="mb-8">
+                        <i class="fas fa-exclamation-triangle text-6xl text-red-500 mb-4"></i>
+                        <h2 class="text-xl font-bold text-white">حدث خطأ</h2>
+                        <p class="text-gray-400 mt-2" id="errorMessage">لم يتم العثور على الطلب أو حدث خطأ في التحقق</p>
+                    </div>
+                    <button onclick="newRequest()" class="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-lg flex items-center transition duration-300 mx-auto">
+                        <i class="fas fa-redo ml-2"></i>
+                        المحاولة مرة أخرى
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
