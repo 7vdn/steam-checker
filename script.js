@@ -10,7 +10,8 @@ function verifyOrder() {
     document.getElementById('requestForm').classList.add('hidden');
     document.getElementById('loadingScreen').classList.remove('hidden');
 
-    fetch("https://cors-anywhere.herokuapp.com/https://hooks.zapier.com/hooks/catch/22574065/2x1gknr/", {
+    // استخدم Another CORS Proxy
+    fetch("https://thingproxy.freeboard.io/fetch/https://hooks.zapier.com/hooks/catch/22574065/2x1gknr/", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
